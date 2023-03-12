@@ -8,7 +8,7 @@
     <ul class="input_lis">
     <li> <input class="form-control" name="item_name" type="text" placeholder="Product's name" required> </li>
     <li> <input class="form-control" name="item_desc" type="text" placeholder="Product's description" required> </li>
-    <li> <input class="form-control" name="price/unit" type="number" placeholder="Price/unit" min="0" step="0.01" required> </li>
+    <li> <input class="form-control" name="price_per_unit" type="number" placeholder="Price/unit" min="0" step="0.01" required> </li>
         <li> <select class="form-select" name="quantity" required>
                 <option value=""> Select quantity available </option>
                 {% for i in range(1, 300): %}

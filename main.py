@@ -21,47 +21,20 @@ mysql = MySQL(app)  # You can also use "with app.app_context():" to connect to a
 app.secret_key = app_secrets.app_key
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-
-user_details = {
-        "email": ["osuwaidi@amazon.ae", "sadau@amazon.ae", "maria@gmail.com"],
-        "password": ["admin", "admin", "sushi98"],
-        "first_name": ["Omar", "Sadaf", "Maria"]
-}
-users_db = pd.DataFrame(user_details).set_index("email")
-
-
 abs_path = app_secrets.root_path
 prod_path = "/static/images/"
-product_details = [
-            {
-                "owner": "osuwaidi",
-                "item_name": "Zebra Printer",
-                "item_desc": "Used to print different kind of labels for different sizes.",
-                "price/unit": 750,
-                "quantity": 2,
-                "img": prod_path+"printer.jpg",
-                "date": "06-25-2022",
-            },
-            {
-                "owner": "sadau",
-                "item_name": "Honeywell Scanner",
-                "item_desc": "A handheld Honeywell XP 1470g scanner in good condition.",
-                "price/unit": 114.99,
-                "quantity": 15,
-                "img": prod_path + "scanner.jpg",
-                "date": "01-16-2021",
-            },
-            {
-                "owner": "osuwaidi",
-                "item_name": "Yellow Totes",
-                "item_desc": "Two dozen of yellow plastic totes hanging around.",
-                "price/unit": 10,
-                "quantity": 139,
-                "img": prod_path + "totes.jpg",
-                "date": "01-7-2023",
-            },
-]
-products_db = pd.DataFrame(product_details).set_index("owner")
+
+
+with app.app_context():
+    cursor = mysql.connection.cursor()
+
+    cursor.execute("select * from users")
+    columns = [col[0] for col in cursor.description]
+    users_db = pd.DataFrame(cursor.fetchall(), columns=columns).set_index("email")
+
+    cursor.execute("select * from products")
+    columns = [col[0] for col in cursor.description]
+    products_db = pd.DataFrame(cursor.fetchall(), columns=columns).set_index("owner")
 
 
 def file_upload(req):
@@ -73,13 +46,26 @@ def file_upload(req):
     # img_data = np.frombuffer(img.read(), np.uint8)  # Convert "img.read()" (raw image data) from raw byte representation to 1D np.array
     # img = cv2.imdecode(img_data, cv2.IMREAD_COLOR)  # Decode and convert 1D np.array into a 3D matrix (image)
     # img = cv2.resize(img, (224, 224))  # New size (width, height)
-    data = {**req.form, "img": prod_path+img_name, "date": date.today().strftime("%d-%m-%Y")}
-    products_db = pd.concat([products_db, pd.DataFrame(data, index=[session["amazon_email"][:-10]])])
+    values = [session["amazon_email"][:-10], *req.form.values(), prod_path+img_name, date.today()]  # Values must be placed in the same order of SQL table's columns
+    query = f"insert into products values ({'%s, '*(len(values)-1)}%s)"
+    with app.app_context():
+        mysql.connection.autocommit(True)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query, values)
+    products_db = pd.concat([products_db, pd.DataFrame([values[1:]], index=[session["amazon_email"][:-10]], columns=columns[1:])])  # "products_db" columns
     session["posted_item"] = req.form["item_name"]
 
 
-def delete_upload(req, amazon_user):
+def file_delete(req, amazon_user):
     global products_db
+    with app.app_context():
+        mysql.connection.autocommit(True)
+        cursor = mysql.connection.cursor()
+        cursor.execute(f"""
+            delete from products
+            where owner='{amazon_user}' 
+                and item_name='{req.form["deleted_item"]}';
+        """)
     products_db = products_db[~((products_db.index == amazon_user) & (products_db["item_name"] == req.form["deleted_item"]))]
     session["deleted_item"] = req.form["deleted_item"]
 
@@ -91,21 +77,6 @@ def tester():
 
 @app.get('/')
 def home_page():
-    # mysql.connection.autocommit(True)
-    # cursor = mysql.connection.cursor()
-    # cursor.execute("""
-    # insert into users values
-    #     (osuwaidi@amazon.ae, admin, Omar),
-    #     (sadau@amazon.ae, admin, Sadaf),
-    #     (maria@gmail.com, sushi98, Maria);
-    # """)
-    # result = cursor.fetchall()
-    # print(result)
-    # print('HELLO')
-    # print(str(result))
-    # print('HELLO')
-    # print(dict(result))
-    # cursor.close()
     return render_template('Homepage.html')
 
 
@@ -139,41 +110,41 @@ def forget_page():
 
 @app.post('/forget_pass')
 def forget_send_link():
+    print(request.form)
     if request.form["amazon_email"] in users_db.index:
         forget_pass = {"sent": True}
     else:
         forget_pass = {"warning": app_warns.acc_no_exist, "email_red": "red"}
 
+    forget_pass.update(request.form)
     return render_template('Forgot.html', **forget_pass)
 
 
 @app.get('/market')
 def market_page():
-    if amazon_email := session.get("amazon_email"):  # If successfully logged in
+    if amazon_email := session.get("amazon_email"):  # If successfully logged in...
         return render_template("Market.html",
                                users_db=users_db,
                                products_db=products_db,
                                amazon_email=amazon_email,
                                posted_item=session.pop("posted_item", None),
                                deleted_item=session.pop("deleted_item", None),)
-    return redirect(url_for("home_page"))
+    return redirect(request.referrer or '/')
 
 
 @app.post('/market')
 def market_post():
-    if search_item := request.form.get("search_item", None):
+    if search_item := request.form.get("search_item"):
         products_db_filtered = products_db[products_db["item_name"].str.contains(search_item, case=False)]
         return render_template("Market.html",
                                users_db=users_db,
                                products_db=products_db_filtered,
                                amazon_email=session["amazon_email"],
-                               posted_item=session.pop("posted_item", None),
-                               deleted_item=session.pop("deleted_item", None),
                                search_item=search_item,)
     if "item_name" in request.form:
         file_upload(request)
     elif "deleted_item" in request.form:
-        delete_upload(request, session["amazon_email"][:-10])
+        file_delete(request, session["amazon_email"][:-10])
     return redirect(url_for("market_page"))
 
 
@@ -203,7 +174,7 @@ def delete_product(amazon_user):
     if "item_name" in request.form:
         file_upload(request)
     elif "deleted_item" in request.form:
-        delete_upload(request, amazon_user)
+        file_delete(request, amazon_user)  # Only able to delete if "amazon_user" == "session['email'][:-10]"
     return redirect(url_for("user_products", amazon_user=amazon_user))
 
 

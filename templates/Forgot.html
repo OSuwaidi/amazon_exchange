@@ -21,10 +21,11 @@
                        type="email"
                        id="email"
                        name="amazon_email"
+                       value="{{amazon_email}}"
                        placeholder="Amazon email address"
                        required>
                 <br>
-                <button type="submit" name="send_link" class="btn btn-success"> Send the magic link <span class="material-icons" style="color: #E3A437"> rocket_launch </span> </button>
+                <button type="submit" class="btn btn-success"> Send the magic link <span class="material-icons" style="color: #E3A437"> rocket_launch </span> </button>
             </form>
         {% else %}
             <h1 style="color: #FB9B1A"> <span class="material-icons" style="color: #556DB5; font-size: 150%"> celebration </span> Done! We've emailed you a link to reset your
