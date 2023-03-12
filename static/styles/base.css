@@ -1,0 +1,204 @@
+
+.background {
+    background-image: url(/static/backgrounds/amazon_city.jpg);
+/*    background-size:contain; */
+    background-size: 100% 100%;
+    height: auto;
+    object-fit: cover
+/*    background-position-x: 20px; */
+    }
+
+.border {
+    text-align: center;
+    background-color: #599C8A;
+    height: auto;
+    width: auto;
+    padding: 0.5%;
+    border-radius: 10px;
+    display: inline-block;
+    box-sizing: border-box;
+    }
+
+.background_border {
+    height: auto;
+    width: 85%;
+    border-radius: 10px;
+    display: inline-block;
+    box-sizing: border-box;
+    padding-bottom: 1%
+    }
+
+.warn_border {
+    text-align: center;
+    background-color: white;
+    height: auto;
+    width: auto;
+    border-radius: 3%;
+    display: inline-block;
+    box-sizing: border-box;
+    }
+
+.warning {color: #DE1313; font-family: Raleway; font-size:12px; font-weight: bold}
+
+.mat_icons {font-size: 180%}
+
+h1 {color: #fd7e14; margin-top: 0%}
+
+body, html {height: 100%; margin: 0px; padding: 0px}
+
+body {text-align: center; font-family: Cairo; font-size: 20px; color: white}
+
+button {font-family: Cairo; font-size: 17px; border-radius: 5px; border-width: 0px; padding: 5px 15px}
+
+input, select {font-family: Raleway; font-size: 17px; border-radius: 10px; border: none; padding: 0.6% 0.5%; width: 20%; background-color: rgb(249, 247, 247)}
+
+input:focus {background-color: lightblue;}
+
+label {vertical-align: middle}
+
+span {vertical-align: middle}
+
+.product{
+  flex: 1;
+  font-size: 80%;
+  border: 1px solid;
+  border-radius: 5px;
+  overflow-y: auto;
+  margin-bottom: 2%;
+  width: 53%;
+  margin-left: 25%
+}
+
+.product:hover{
+    background-color: #FB9B1A
+}
+
+.prod_img {
+    float: left;
+    border-right: 1px dotted black;
+    margin-right: 2%;
+}
+
+.prod_text{
+    margin: 0;
+    padding: 0;
+    text-align: left
+}
+
+nav {
+  border-radius: 1%;
+  background-color: #333;
+  z-index: 1;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  justify-content: space-between; /* distribute items evenly along the main axis */
+}
+
+nav li {
+  float: left;
+}
+
+nav a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background-color: #111;
+}
+
+nav .material-icons{
+    color: #fd7e14;
+    font-size: 25px;
+    margin-right: -7px;
+}
+
+.right {
+  float: right;
+  text-align: right;
+}
+
+#search-bar {
+  font-size: 16px;
+  padding: 12px 20px;
+  border: 2px ridge;
+}
+
+.search_button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover{
+    background-color: green;
+}
+
+.side-panel {
+  position: fixed;
+  border-radius: 1%;
+  top: 0;
+  bottom: 0;
+  width: 17%;
+  /* Use linear gradient for background */
+  background-image: linear-gradient(to bottom, #fd7e14, #FFD482);
+  overflow-y: auto;
+  z-index: -10;
+  height: 100%;
+}
+
+.buy_button{
+    float: right;
+    margin-right: 5%;
+    bottom: 30px;
+}
+
+.edit_button{
+    float: right;
+    margin-right: 5%;
+    bottom: 30px;
+}
+
+.delete_button {
+    top: 35px;
+    left: 200px;
+}
+
+.product button {
+    display: inline-block;
+    position: relative;
+    box-shadow: 5px 5px #888888;
+}
+
+#search_icon {color: pink}
+
+#myPopUp {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 600px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.input_lis {
+    list-style-type: none;
+}
+
+.input_lis li {
+    margin-bottom: 2%;
+}

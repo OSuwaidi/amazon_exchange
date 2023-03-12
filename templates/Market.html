@@ -1,0 +1,29 @@
+<!-- بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وبه نستعين -->
+
+{% extends 'header.html' %}
+
+{% block content %}
+    <title>Exchange Market</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body style="color: black; background-color: #FAF9F6">
+    <div class="side-panel">
+
+    </div>
+    <h1 style="margin-top: 63px;"> Welcome {{users_db.loc[amazon_email, "first_name"]}}, To Amazon's Exchange Market! </h1>
+    <br>
+    <form action="#" method="post">
+        <input name="search_item" type="text" id="search-bar" value="{{search_item}}" placeholder="Search Market ...">
+        <button type="submit" class="search_button"> Search <span class="material-icons" id="search_icon"> search </span> </button>
+    </form>
+    <br>
+    {% if posted_item: %}
+        <h1><span class="badge bg-secondary"> Successfully posted "{{posted_item}}" <span class="material-icons" style="color: #0dcaf0;"> verified </span> </span></h1>
+    {% endif %}
+    {% if deleted_item: %}
+        <h3 class="alert alert-danger"> Successfully deleted "{{deleted_item}}" <span class="material-icons"> backspace </span> </h3>
+    {% endif %}
+    {% include 'list_products.html' %}
+    {% include 'navbar.html' %}
+    </body>
+{% endblock %}

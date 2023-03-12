@@ -1,0 +1,48 @@
+<!-- بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وبه نستعين -->
+
+{% extends 'header.html' %}
+
+{% block content %}
+    <title>Exchange Portal</title>
+    </head>
+    <body style="background-color: rgb(249, 247, 247); margin-top:  3%;">
+    <div class="background background_border top">
+        <h1 style="font-size: 60px; margin-top: 20px;"> Amazon Exchange Portal <span class="material-icons" style="font-size: 60px; color: #fd7e14">  shopping_cart
+        </span> </h1>
+        <div class="border" style="margin-bottom: 30%;">
+            Here you can sell, buy, or rent equipment across amazon FCs <span class="material-icons" style="margin-left: -1.5%">  priority_high </span> <span
+                class="material-icons"> warehouse </span>
+        </div>
+        <br>
+        <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> {{warning}} </p><br>
+        <form action="#" method="post">
+            <div >
+                <label for="email" class="material-icons"> alternate_email </label>
+                <input style="margin-bottom: 1%; border: 2px ridge {{email_red}};"
+                       type="email"
+                       id="email"
+                       name="amazon_email"
+                       placeholder="Amazon email address"
+                       value="{{ amazon_email }}" required>
+                <br>
+                <label for="password" class="material-icons"> lock </label>
+                <input style="margin-bottom: 2%; border: 2px ridge {{pass_red}};"
+                       type="password"
+                       id="password"
+                       name="password"
+                       placeholder="Password"
+                       value="{{ password }}"
+                       required>
+                <br>
+                <button type="submit"
+                        name="login"
+                        class="btn btn-success">
+                        Login <span class="material-icons"> login </span>
+                </button>
+            </div>
+        </form>
+
+        <a href=/forget_pass style="font-size: 17px; color: lightblue"> Forgot password? </a>
+    </div>
+    </body>
+{% endblock %}

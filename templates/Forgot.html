@@ -1,0 +1,40 @@
+<!-- بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وبه نستعين -->
+
+{% extends 'header.html' %}
+
+{% block content %}
+    <title>Forgot Password</title>
+    </head>
+    <body class="background">
+    <div style="margin-top: 5%;">
+        {% if not sent %}
+            <h1 style="color: #FB9B1A; margin-bottom:0;"> Don't worry, it happens to the best of us <span class="material-icons" style="margin-left: -1%; font-size: 100%">  priority_high
+            </span>
+            </h1>
+            <p style="margin-bottom:0; margin-top:0; color: #adb5bd"> Please enter your amazon email address below and we'll send you a link to reset your amazon exchange
+                password!
+            </p>
+            <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> {{warning}} </p>
+            <form action="#" method="post" style="margin-bottom:30%">
+                <label for="email" class="material-icons" style="color: #DFBE03"> email </label>
+                <input style="margin-bottom: 1%; border: 2px ridge {{email_red}}"
+                       type="email"
+                       id="email"
+                       name="amazon_email"
+                       placeholder="Amazon email address"
+                       required>
+                <br>
+                <button type="submit" name="send_link" class="btn btn-success"> Send the magic link <span class="material-icons" style="color: #E3A437"> rocket_launch </span> </button>
+            </form>
+        {% else %}
+            <h1 style="color: #FB9B1A"> <span class="material-icons" style="color: #556DB5; font-size: 150%"> celebration </span> Done! We've emailed you a link to reset your
+                password!
+                <span class="material-icons" style="color: #556DB5; font-size: 150%"> celebration </span></h1>
+        {% endif %}
+
+        <form action="/" method="get">
+            <button type="submit" class="btn btn-success"> Portal <span class="material-icons" style="color: #751BD5"> hub</span> </button>
+        </form>
+    </div>
+</body>
+{% endblock %}
