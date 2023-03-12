@@ -169,8 +169,9 @@ button[type="submit"]:hover{
 }
 
 .delete_button {
-    top: 35px;
-    left: 200px;
+    float: right;
+    top: 95px;
+    left: 55px;
 }
 
 .product button {

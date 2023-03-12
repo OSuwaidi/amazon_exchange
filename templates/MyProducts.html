@@ -10,11 +10,16 @@
     <br>
     {% if posted_item: %}
         <h1><span class="badge bg-secondary"> Successfully posted "{{posted_item}}" <span class="material-icons" style="color: #0dcaf0;"> verified </span> </span></h1>
-    {% endif %}
-    {% if deleted_item: %}
+    {% elif deleted_item: %}
         <h3 class="alert alert-danger"> Successfully deleted "{{deleted_item}}" <span class="material-icons"> backspace </span> </h3>
     {% endif %}
-    {% include 'list_products.html' %}
+
+    {% if has_products: %}
+        {% include 'list_products.html' %}
+    {% else: %}
+        <h2> No products posted <span class="material-icons" style="font-size: 30px; color: #fd7e14; "> cancel </span> </h2>
+    {% endif %}
+
     {% include 'navbar.html' %}
     </body>
 {% endblock %}
