@@ -14,11 +14,17 @@
                 class="material-icons"> warehouse </span>
         </div>
         <br>
-        <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> {{warning}} </p><br>
+        {% if session.pop("wrong_pass", None): %}
+            {% set pass_color = "red" %}
+            <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> The password you’ve entered is incorrect </p><br>
+        {% elif session.pop("wrong_email", None): %}
+            {% set email_color = "red" %}
+            <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> This email address does not exist </p><br>
+        {% endif %}
         <form action="#" method="post">
             <div >
                 <label for="email" class="material-icons"> alternate_email </label>
-                <input style="margin-bottom: 1%; border: 2px ridge {{email_red}};"
+                <input style="margin-bottom: 1%; border: 2px ridge {{email_color}};"
                        type="email"
                        id="email"
                        name="amazon_email"
@@ -26,7 +32,7 @@
                        value="{{ amazon_email }}" required>
                 <br>
                 <label for="password" class="material-icons"> lock </label>
-                <input style="margin-bottom: 2%; border: 2px ridge {{pass_red}};"
+                <input style="margin-bottom: 2%; border: 2px ridge {{pass_color}};"
                        type="password"
                        id="password"
                        name="password"

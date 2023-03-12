@@ -7,17 +7,20 @@
     </head>
     <body class="background">
     <div style="margin-top: 5%;">
-        {% if not sent %}
+        {% if not session.pop("sent", None): %}
             <h1 style="color: #FB9B1A; margin-bottom:0;"> Don't worry, it happens to the best of us <span class="material-icons" style="margin-left: -1%; font-size: 100%">  priority_high
             </span>
             </h1>
             <p style="margin-bottom:0; margin-top:0; color: #adb5bd"> Please enter your amazon email address below and we'll send you a link to reset your amazon exchange
                 password!
             </p>
-            <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> {{warning}} </p>
+            {% if session.pop("no_email", None): %}
+                {% set email_color = "red" %}
+                <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> This email address does not exist </p>
+            {% endif %}
             <form action="#" method="post" style="margin-bottom:30%">
                 <label for="email" class="material-icons" style="color: #DFBE03"> email </label>
-                <input style="margin-bottom: 1%; border: 2px ridge {{email_red}}"
+                <input style="margin-bottom: 1%; border: 2px ridge {{email_color}}"
                        type="email"
                        id="email"
                        name="amazon_email"
@@ -33,9 +36,7 @@
                 <span class="material-icons" style="color: #556DB5; font-size: 150%"> celebration </span></h1>
         {% endif %}
 
-        <form action="/" method="get">
-            <button type="submit" class="btn btn-success"> Portal <span class="material-icons" style="color: #751BD5"> hub</span> </button>
-        </form>
+        <button onclick="window.location.href='/'" type="submit" class="btn btn-success"> Portal <span class="material-icons" style="color: #751BD5"> hub</span> </button>
     </div>
 </body>
 {% endblock %}
