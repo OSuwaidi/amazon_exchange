@@ -27,7 +27,7 @@ prod_path = "/static/images/"
 with app.app_context():
     cursor = mysql.connection.cursor()
 
-    cursor.execute("select * from users")
+    cursor.execute("select * from users")  # "cursor.fetchall()" after the "select" statement returns a tuple of rows as tuples
     columns = [col[0] for col in cursor.description]
     users_db = pd.DataFrame(cursor.fetchall(), columns=columns).set_index("email")
 
@@ -136,6 +136,8 @@ def market_post():
         file_upload(request)
     elif request.form.get("deleted_item"):
         file_delete(request, session["amazon_email"][:-10])
+    elif item_name := request.form.get("edited_item"):
+        pass
     return redirect(url_for("market_page"))
 
 
