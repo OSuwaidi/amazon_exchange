@@ -7,6 +7,7 @@ import pandas as pd
 import app_secrets
 from datetime import date
 from PIL import Image
+from secrets import compare_digest
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -69,23 +70,24 @@ def file_delete(req, amazon_user):
     session["deleted_item"] = req.form["deleted_item"]
 
 
-@app.get('/')
-def home_page():
-    return render_template('Homepage.html')
-
-
 @app.after_request
 def add_header(response):
+    # An attempt to prevent browsers from caching pages such that upon logout, user can't access previous page by pressing "previous page" button
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
 
 
+@app.get('/')
+def home_page():
+    return render_template('Homepage.html')
+
+
 @app.post('/')
 def home_login():
     if (amazon_email := request.form["amazon_email"]) in users_db.index:
-        if users_db.loc[amazon_email, "password"] == request.form["password"]:
+        if compare_digest(users_db.loc[amazon_email, "password"], request.form["password"]):
             session["amazon_email"] = amazon_email
             return redirect(url_for('market_page'))
         else:
