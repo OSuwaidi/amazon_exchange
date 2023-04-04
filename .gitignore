@@ -1,5 +1,4 @@
 app_secrets.py
-test.py
-test.html
+test*
 .DS_Store
 __pycache__
