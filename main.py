@@ -79,6 +79,11 @@ def add_header(response):
     return response
 
 
+@app.get('/test')
+def test_page():
+    return render_template("test.html")
+
+
 @app.get('/')
 def home_page():
     return render_template('Homepage.html')

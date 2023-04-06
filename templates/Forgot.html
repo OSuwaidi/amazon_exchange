@@ -2,8 +2,8 @@
 {% extends 'header.html' %}
 
 {% block content %}
-    <title>Forgot Password</title>
-    </head>
+<title>Forgot Password</title>
+</head>
     <body class="background">
     <div style="margin-top: 5%;">
         {% if not session.pop("sent", None): %}
@@ -37,5 +37,5 @@
 
         <button onclick="window.location.href='/'" type="submit" class="btn btn-success"> Portal <span class="material-icons" style="color: #751BD5"> hub</span> </button>
     </div>
-</body>
+    </body>
 {% endblock %}
