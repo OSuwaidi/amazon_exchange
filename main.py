@@ -24,7 +24,7 @@ app.permanent_session_lifetime = timedelta(minutes=30)
 abs_path = app_secrets.root_path
 prod_path = "/static/images/"
 
-
+# Retrieve all "users" and "products" data tables from the MySQL database hosted on the cloud:
 with app.app_context():
     cursor = mysql.connection.cursor()
 
