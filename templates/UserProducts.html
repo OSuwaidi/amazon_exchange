@@ -1,0 +1,13 @@
+
+{% extends 'header.html' %}
+
+{% block content %}
+<title>My Products</title>
+</head>
+    <body style="color: black; background-color: rgb(249, 247, 247)">
+    <h1 style="margin-top: 63px;"> {{amazon_user}}'s Products </h1>
+    <br>
+    {% include 'list_products.html' %}
+    {% include 'navbar.html' %}
+    </body>
+{% endblock %}

@@ -1,26 +1,36 @@
 
-<h2> {{products_db | length}} Product Results </h2>
-<br>
-{% for product in products_db.itertuples(): %}
-    <div class="product">
-        <img class="prod_img img-fluid" src="{{ product.img }}" alt="Product {{ loop.index0 }}">
-        <h3 style="padding: 2% 0%;"> {{product.item_name}}</h3>
-        {% if product.Index == amazon_email[:-10]: %}
-            <form action="#" method="post">
-                <button class="btn btn-dark edit_button" name="edited_item" value='{{product.item_name}}'> EDIT </button>
-            </form>
-            <form action="#" method="post">
-                <button class="btn btn-danger delete_button" name="deleted_item" value="{{product.item_name}}"> <span class="material-icons"> delete_forever
-                </span>
-                </button>
-            </form>
-        {% else: %}
-            <button onclick="window.location.href='{% include 'emailto.html' %}'" class="buy_button btn btn-success"> BUY </button>
-        {% endif %}
-        <p class="prod_text"> <span style="color: blue;"> Quantity: </span> <span> {{product.quantity}} </span> </p>
-        <p class="prod_text"><span style="color: blue;"> Price/unit: </span> <span> ${{product.price_per_unit}} </span> </p>
-        <p class="prod_text"><span style="color: blue;"> Description: </span> <span> {{product.item_desc}} </span> </p>
-        <p class="prod_text"><span style="color: blue;"> Date posted: </span> <span>  {{product.date}} </span> </p>
-        <p class="prod_text" style="margin-bottom: -9%;"><span style="color: blue;"> By: </span> <span>  {{product.Index}} </span> </p>
-    </div>
-{% endfor %}
+{% if posted_item %}
+    <h1><span class="badge bg-secondary"> Successfully posted "{{posted_item}}" <span class="material-icons" style="color: #0dcaf0;"> verified </span> </span></h1>
+{% elif deleted_item %}
+    <h3 class="alert alert-danger"> Successfully deleted "{{deleted_item}}" <span class="material-icons"> backspace </span> </h3>
+{% endif %}
+
+{% if not products_db.empty %}
+    <h2> {{products_db | length}} Product Results </h2>
+    <br>
+        {% for product in products_db.itertuples() %}
+            <div class="product">
+                <img class="prod_img img-fluid" src="{{ product.img }}" alt="Product {{ loop.index0 }}">
+                <h3 style="padding: 2% 0%;"> {{product.item_name}}</h3>
+                {% if product.Index == amazon_email[:-10]: %}
+                    <form action="#" method="post">
+                        <button class="btn btn-dark edit_button" name="edited_item" value='{{product.item_name}}'> EDIT </button>
+                    </form>
+                    <form action="#" method="post">
+                        <button class="btn btn-danger delete_button" name="deleted_item" value="{{product.item_name}}"> <span class="material-icons"> delete_forever
+                        </span>
+                        </button>
+                    </form>
+                {% else: %}
+                    <button onclick="window.location.href='{% include 'emailto.html' %}'" class="buy_button btn btn-success"> BUY </button>
+                {% endif %}
+                <p class="prod_text"> <span style="color: blue;"> Quantity: </span> <span> {{product.quantity}} </span> </p>
+                <p class="prod_text"><span style="color: blue;"> Price/unit: </span> <span> ${{product.price_per_unit}} </span> </p>
+                <p class="prod_text"><span style="color: blue;"> Description: </span> <span> {{product.item_desc}} </span> </p>
+                <p class="prod_text"><span style="color: blue;"> Date posted: </span> <span>  {{product.date}} </span> </p>
+                <p class="prod_text" style="margin-bottom: -9%;"><span style="color: blue;"> By: </span> <span>  {{product.Index}} </span> </p>
+            </div>
+        {% endfor %}
+{% else %}
+    <h2> No products posted <span class="material-icons" style="font-size: 30px; color: #fd7e14; "> cancel </span> </h2>
+{% endif %}

@@ -16,11 +16,6 @@
         <button type="submit" class="search_button"> Search <span class="material-icons" id="search_icon"> search </span> </button>
     </form>
     <br>
-    {% if posted_item: %}
-        <h1><span class="badge bg-secondary"> Successfully posted "{{posted_item}}" <span class="material-icons" style="color: #0dcaf0;"> verified </span> </span></h1>
-    {% elif deleted_item: %}
-        <h3 class="alert alert-danger"> Successfully deleted "{{deleted_item}}" <span class="material-icons"> backspace </span> </h3>
-    {% endif %}
 
     {% include 'list_products.html' %}
     {% include 'navbar.html' %}

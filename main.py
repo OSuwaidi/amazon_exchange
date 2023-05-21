@@ -28,16 +28,18 @@ prod_path = "/static/images/"
 with app.app_context():
     cursor = mysql.connection.cursor()
 
-    cursor.execute("select * from users")  # "cursor.fetchall()" after the "select" statement returns a tuple of rows as tuples
+    cursor.execute("select * from users")
     columns = [col[0] for col in cursor.description]
+    # "cursor.fetchall()" after the "cursor.execute: select" statement returns a tuple of rows/records as tuples
     users_db = pd.DataFrame(cursor.fetchall(), columns=columns).set_index("email")
 
     cursor.execute("select * from products")
     columns = [col[0] for col in cursor.description]
     products_db = pd.DataFrame(cursor.fetchall(), columns=columns).set_index("owner")
+    cursor.close()
 
 
-def file_upload(req):
+def file_upload(item_name, req, amazon_user):
     global products_db
     # img_data = np.frombuffer(img.read(), np.uint8)  # Convert "img.read()" (raw image data) from raw byte representation to 1D np.array
     # img = cv2.imdecode(img_data, cv2.IMREAD_COLOR)  # Decode and convert 1D np.array into a 3D matrix (image)
@@ -46,17 +48,17 @@ def file_upload(req):
     img_name = img.filename
     img = Image.open(img).resize((224, 224))
     img.save(abs_path+prod_path+img_name)
-    values = [session["amazon_email"][:-10], *req.form.values(), prod_path+img_name, date.today()]  # Values must be placed in the same order of SQL table's columns
+    values = [amazon_user, *req.form.values(), prod_path+img_name, date.today()]  # Values must be placed in the same order of SQL table's columns
     query = f"insert into products values ({'%s, '*(len(values)-1)}%s)"
     with app.app_context():
         mysql.connection.autocommit(True)
         cursor = mysql.connection.cursor()
         cursor.execute(query, values)
-    products_db = pd.concat([products_db, pd.DataFrame([values[1:]], index=[session["amazon_email"][:-10]], columns=columns[1:])])  # "columns[1:]" is "products_db" columns
-    session["posted_item"] = req.form["item_name"]
+    products_db = pd.concat([products_db, pd.DataFrame([values[1:]], index=[amazon_user], columns=columns[1:])])  # "columns[1:]" is "products_db" columns
+    session["posted_item"] = item_name
 
 
-def file_delete(req, amazon_user):
+def file_delete(item_name, amazon_user):
     global products_db
     with app.app_context():
         mysql.connection.autocommit(True)
@@ -64,10 +66,20 @@ def file_delete(req, amazon_user):
         cursor.execute(f"""
             delete from products
             where owner='{amazon_user}' 
-                and item_name='{req.form["deleted_item"]}';
+                and item_name='{item_name}';
         """)
-    products_db = products_db[~((products_db.index == amazon_user) & (products_db["item_name"] == req.form["deleted_item"]))]
-    session["deleted_item"] = req.form["deleted_item"]
+    products_db = products_db[~((products_db.index == amazon_user) & (products_db["item_name"] == item_name))]
+    session["deleted_item"] = item_name
+
+
+def check_modify(req, amazon_user):
+    if item_name := req.form.get("posted_item"):
+        file_upload(item_name, req, amazon_user)
+    elif item_name := req.form.get("deleted_item"):
+        file_delete(item_name, amazon_user)
+    elif item_name := req.form.get("edited_item"):
+        # To be added later
+        pass
 
 
 @app.after_request
@@ -100,7 +112,7 @@ def home_login():
     else:
         session["wrong_email"] = True
 
-    return render_template('Homepage.html', **session, **request.form)
+    return render_template('Homepage.html', **(session | request.form))
 
 
 @app.get('/forget_pass')
@@ -115,7 +127,7 @@ def forget_send_link():
     else:
         session["no_email"] = True
 
-    return render_template('Forgot.html', **session, **request.form)
+    return render_template('Forgot.html', **(session | request.form))
 
 
 @app.get('/market')
@@ -139,12 +151,8 @@ def market_post():
                                products_db=products_db_filtered,
                                amazon_email=session["amazon_email"],
                                search_item=search_item,)
-    if request.form.get("item_name"):
-        file_upload(request)
-    elif request.form.get("deleted_item"):
-        file_delete(request, session["amazon_email"][:-10])
-    elif item_name := request.form.get("edited_item"):
-        pass
+
+    check_modify(request, session["amazon_email"][:-10])
     return redirect(url_for("market_page"))
 
 
@@ -152,30 +160,25 @@ def market_post():
 def user_products(amazon_user):
     if amazon_email := session.get("amazon_email"):
         if amazon_user in products_db.index:
-            has_products = True
             products_db_filtered = products_db.loc[[amazon_user]]
         else:
-            has_products = False
-            products_db_filtered = None
+            products_db_filtered = pd.DataFrame()
 
-        return render_template("MyProducts.html",
+        return render_template("UserProducts.html",
                                amazon_user=amazon_user,
                                amazon_email=amazon_email,
                                products_db=products_db_filtered,
                                users_db=users_db,
                                posted_item=session.pop("posted_item", None),
-                               deleted_item=session.pop("deleted_item", None),
-                               has_products=has_products)
+                               deleted_item=session.pop("deleted_item", None),)
 
     return redirect(request.referrer or '/')
 
 
+# Only able to issue a "POST" request below if "amazon_user" == "amazon_email[:-10]"
 @app.post('/market/<amazon_user>')
-def delete_product(amazon_user):
-    if request.form.get("item_name"):
-        file_upload(request)
-    elif request.form.get("deleted_item"):
-        file_delete(request, amazon_user)  # Only able to delete if "amazon_user" == "session['email'][:-10]"
+def modify_product(amazon_user):
+    check_modify(request, amazon_user)
     return redirect(url_for("user_products", amazon_user=amazon_user))
 
 
