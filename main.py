@@ -2,6 +2,7 @@
 
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_mysqldb import MySQL
+from functools import wraps
 from datetime import timedelta
 import pandas as pd
 import app_secrets
@@ -48,7 +49,9 @@ def file_upload(item_name, req, amazon_user):
     img_name = img.filename
     img = Image.open(img).resize((224, 224))
     img.save(abs_path+prod_path+img_name)
-    values = [amazon_user, *req.form.values(), prod_path+img_name, date.today()]  # Values must be placed in the same order of SQL table's columns
+    form = req.form.copy()
+    is_IT = form.pop("is_IT", None) is not None
+    values = [amazon_user, *form.values(), is_IT, prod_path+img_name, date.today()]  # Values must be placed in the same order of SQL table's columns
     query = f"insert into products values ({'%s, '*(len(values)-1)}%s)"
     with app.app_context():
         mysql.connection.autocommit(True)
@@ -72,7 +75,7 @@ def file_delete(item_name, amazon_user):
     session["deleted_item"] = item_name
 
 
-def check_modify(req, amazon_user):
+def check_modification(req, amazon_user):
     if item_name := req.form.get("posted_item"):
         file_upload(item_name, req, amazon_user)
     elif item_name := req.form.get("deleted_item"):
@@ -80,6 +83,16 @@ def check_modify(req, amazon_user):
     elif item_name := req.form.get("edited_item"):
         # To be added later
         pass
+
+
+def login_required(route):
+    @wraps(route)
+    def wrapper(*args, **kwargs):
+        if "amazon_email" in session:
+            return route(*args, **kwargs)
+        else:
+            return redirect(request.referrer or '/')
+    return wrapper
 
 
 @app.after_request
@@ -112,7 +125,7 @@ def home_login():
     else:
         session["wrong_email"] = True
 
-    return render_template('Homepage.html', **(session | request.form))
+    return render_template('Homepage.html', **request.form)
 
 
 @app.get('/forget_pass')
@@ -127,22 +140,22 @@ def forget_send_link():
     else:
         session["no_email"] = True
 
-    return render_template('Forgot.html', **(session | request.form))
+    return render_template('Forgot.html', **request.form)
 
 
 @app.get('/market')
+@login_required
 def market_page():
-    if amazon_email := session.get("amazon_email"):  # If successfully logged in...
-        return render_template("Market.html",
-                               users_db=users_db,
-                               products_db=products_db,
-                               amazon_email=amazon_email,
-                               posted_item=session.pop("posted_item", None),
-                               deleted_item=session.pop("deleted_item", None),)
-    return redirect(request.referrer or '/')
+    return render_template("Market.html",
+                           users_db=users_db,
+                           products_db=products_db,
+                           amazon_email=session["amazon_email"],
+                           posted_item=session.pop("posted_item", None),
+                           deleted_item=session.pop("deleted_item", None),)
 
 
 @app.post('/market')
+@login_required
 def market_post():
     if search_item := request.form.get("search_item"):
         products_db_filtered = products_db[products_db["item_name"].str.contains(search_item, case=False)]
@@ -152,33 +165,32 @@ def market_post():
                                amazon_email=session["amazon_email"],
                                search_item=search_item,)
 
-    check_modify(request, session["amazon_email"][:-10])
+    check_modification(request, session["amazon_email"][:-10])
     return redirect(url_for("market_page"))
 
 
 @app.get('/market/<amazon_user>')
+@login_required
 def user_products(amazon_user):
-    if amazon_email := session.get("amazon_email"):
-        if amazon_user in products_db.index:
-            products_db_filtered = products_db.loc[[amazon_user]]
-        else:
-            products_db_filtered = pd.DataFrame()
+    if amazon_user in products_db.index:
+        products_db_filtered = products_db.loc[[amazon_user]]
+    else:
+        products_db_filtered = pd.DataFrame()
 
-        return render_template("UserProducts.html",
-                               amazon_user=amazon_user,
-                               amazon_email=amazon_email,
-                               products_db=products_db_filtered,
-                               users_db=users_db,
-                               posted_item=session.pop("posted_item", None),
-                               deleted_item=session.pop("deleted_item", None),)
-
-    return redirect(request.referrer or '/')
+    return render_template("UserProducts.html",
+                           amazon_user=amazon_user,
+                           amazon_email=session["amazon_email"],
+                           products_db=products_db_filtered,
+                           users_db=users_db,
+                           posted_item=session.pop("posted_item", None),
+                           deleted_item=session.pop("deleted_item", None),)
 
 
 # Only able to issue a "POST" request below if "amazon_user" == "amazon_email[:-10]"
 @app.post('/market/<amazon_user>')
+@login_required
 def modify_product(amazon_user):
-    check_modify(request, amazon_user)
+    check_modification(request, amazon_user)
     return redirect(url_for("user_products", amazon_user=amazon_user))
 
 

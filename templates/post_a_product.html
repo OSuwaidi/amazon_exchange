@@ -7,12 +7,12 @@
     <ul class="input_lis">
     <li> <input class="form-control" name="posted_item" type="text" placeholder="Product's name" required> </li>
     <li> <input class="form-control" name="item_desc" type="text" placeholder="Product's description" required> </li>
-<!--    <li>-->
-<!--        <div class="form-check form-switch">-->
-<!--            <label class="form-check-label" for="checkbox" style="font-size: 90%; float: left;"> Is the product related to IT? </label>-->
-<!--            <input class="form-check-input" id="checkbox" role="switch" name="is_IT" type="checkbox" style="position: relative; left: 70px; top: 2px;" required>-->
-<!--        </div>-->
-<!--    </li>-->
+    <li>
+        <label class="form-check-label" for="switchbox" style="font-size: 90%;"> Does the product belong to IT? </label>
+        <div class="form-switch">
+            <input class="form-check-input" id="switchbox" role="switch" name="is_IT" type="checkbox">
+        </div>
+    </li>
     <li> <input class="form-control" name="price_per_unit" type="number" placeholder="Price/unit" min="0" step="0.01" required> </li>
         <li> <select class="form-select" name="quantity" required>
                 <option value=""> Select quantity available </option>
