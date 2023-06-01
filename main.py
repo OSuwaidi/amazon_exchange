@@ -31,7 +31,7 @@ with app.app_context():
 
     cursor.execute("select * from users")
     columns = [col[0] for col in cursor.description]
-    # "cursor.fetchall()" after the "cursor.execute: select" statement returns a tuple of rows/records as tuples
+    # "cursor.fetchall()" returns the resulting query/execution as a tuple of tupled rows/records
     users_db = pd.DataFrame(cursor.fetchall(), columns=columns).set_index("email")
 
     cursor.execute("select * from products")

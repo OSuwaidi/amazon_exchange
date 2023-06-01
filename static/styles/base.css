@@ -54,35 +54,54 @@ input, select {font-family: Raleway; font-size: 17px; border-radius: 10px; borde
 
 input:focus {background-color: lightblue;}
 
+i {vertical-align: middle}
+
 label {vertical-align: middle}
 
-span {vertical-align: middle}
-
-.product{
-  flex: 1;
-  font-size: 80%;
+.product {
+  font-size: 85%;
   border: 1px solid;
   border-radius: 5px;
-  overflow-y: auto;
+  width: 55%;
+  margin: auto;
   margin-bottom: 2%;
-  width: 53%;
-  margin-left: 25%
+  overflow-y: auto;
 }
 
 .product:hover{
     background-color: #FB9B1A
 }
 
-.prod_img {
+.product img {
     float: left;
     border-right: 1px dotted black;
     margin-right: 2%;
+    height: 15rem;
+    width: auto;
+}
+
+.prod_info {
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+Used to have any "floated" items be contained within a "div"
+It allows "div" container to expand to floated elements too
+ */
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .prod_text{
     margin: 0;
-    padding: 0;
     text-align: left
+}
+
+.prod_title {
+    color: blue;
 }
 
 nav {
@@ -119,6 +138,12 @@ nav .material-icons{
     color: #fd7e14;
     font-size: 25px;
     margin-right: -7px;
+}
+
+.alert {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 0.5rem;
 }
 
 .right {
@@ -158,20 +183,20 @@ button[type="submit"]:hover{
 
 .buy_button{
     float: right;
-    margin-right: 5%;
-    bottom: 30px;
+    margin-right: 3%;
+    bottom: 1rem;
 }
 
 .edit_button{
     float: right;
-    margin-right: 5%;
-    bottom: 30px;
+    margin-right: 3%;
+    bottom: 1rem;
 }
 
 .delete_button {
     float: right;
-    top: 95px;
-    left: 55px;
+    top: 7rem;
+    left: 3.3rem;
 }
 
 .product button {
@@ -179,8 +204,6 @@ button[type="submit"]:hover{
     position: relative;
     box-shadow: 5px 5px #888888;
 }
-
-#search_icon {color: pink}
 
 #myPopUp {
   display: none;
