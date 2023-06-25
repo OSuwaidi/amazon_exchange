@@ -157,16 +157,25 @@ def market_page():
 @app.post('/market')
 @login_required
 def market_post():
-    if search_item := request.form.get("search_item"):
-        products_db_filtered = products_db[products_db["item_name"].str.contains(search_item, case=False)]
-        return render_template("Market.html",
-                               users_db=users_db,
-                               products_db=products_db_filtered,
-                               amazon_email=session["amazon_email"],
-                               search_item=search_item,)
+    products_db_filtered = products_db
+    if category := request.form.get("category"):
+        session["category"] = category
+
+    if (search_item := request.form.get("search_item")) is not None:
+        session["searched"] = search_item
+
+    if (category := session.get("category")) and category != "all":
+        products_db_filtered = products_db.loc[products_db["category"] == category]
+
+    if search_item := session.get("searched", default=""):
+        products_db_filtered = products_db_filtered.loc[products_db_filtered["item_name"].str.contains(search_item, case=False)]
 
     check_modification(request, session["amazon_email"][:-10])
-    return redirect(url_for("market_page"))
+    return render_template("Market.html",
+                           users_db=users_db,
+                           products_db=products_db_filtered,
+                           amazon_email=session["amazon_email"],
+                           search_item=search_item,)
 
 
 @app.get('/market/<amazon_user>')

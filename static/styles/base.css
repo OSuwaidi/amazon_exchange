@@ -107,14 +107,12 @@ It allows "div" container to expand to floated elements too
 nav {
   border-radius: 1%;
   background-color: #333;
-  z-index: 1;
 }
 
 nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   justify-content: space-between; /* distribute items evenly along the main axis */
 }
 
@@ -125,7 +123,6 @@ nav li {
 nav a {
   display: block;
   color: white;
-  text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
@@ -172,13 +169,23 @@ button[type="submit"]:hover{
   position: fixed;
   border-radius: 1%;
   top: 0;
-  bottom: 0;
   width: 17%;
   /* Use linear gradient for background */
   background-image: linear-gradient(to bottom, #fd7e14, #FFD482);
-  overflow-y: auto;
-  z-index: -10;
   height: 100%;
+}
+
+.cat_label {
+    position: fixed;
+    left: 3rem;
+    top: 7.5rem;
+}
+
+.cat_select{
+    position: fixed;
+    top: 10rem;
+    width: auto;
+    left: 2.5rem;
 }
 
 .buy_button{

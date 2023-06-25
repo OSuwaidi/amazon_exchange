@@ -7,7 +7,17 @@
 </head>
     <body style="color: black; background-color: #FAF9F6">
     <div class="side-panel">
-
+        <form action="#" method="post">
+            <label for="cat" class="cat_label" style="display: flex; flex-direction: column;"> Filter by category: </label>
+            <select id="cat" class="cat_select" name="category">
+                <option value="" selected disabled> Select a category </option>
+                <option value="all"> All </option>
+                <option value="space"> Space </option>
+                <option value="OPT1"> OPT1 </option>
+                <option value="OPT2"> OPT2 </option>
+                <option value="OPT3"> OPT3 </option>
+            </select>
+        </form>
     </div>
     <h1 style="margin-top: 63px;"> Welcome {{users_db.loc[amazon_email, "first_name"]}}, To Amazon's Exchange Market! </h1>
     <br>
@@ -16,6 +26,15 @@
         <button type="submit" class="search_button"> Search <i class="material-icons" style="color: pink; margin-right: -0.5rem;"> search </i> </button>
     </form>
     <br>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const selectElement = document.getElementById('cat');
+
+            selectElement.addEventListener('change', (event) => {
+                selectElement.form.submit();
+            });
+        });
+    </script>
 
     {% include 'list_products.html' %}
     {% include 'navbar.html' %}
