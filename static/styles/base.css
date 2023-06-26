@@ -66,6 +66,7 @@ label {vertical-align: middle}
   margin: auto;
   margin-bottom: 2%;
   overflow-y: auto;
+  height: auto;
 }
 
 .product:hover{
@@ -76,13 +77,25 @@ label {vertical-align: middle}
     float: left;
     border-right: 1px dotted black;
     margin-right: 2%;
-    height: 15rem;
     width: auto;
+    height: 16.3rem;
+}
+
+.product div {
+    text-align: left;
 }
 
 .prod_info {
     display: flex;
     flex-direction: column;
+}
+
+.prod_info p {
+    margin: 0;
+}
+
+.prod_info span {
+    color: blue;
 }
 
 /*
@@ -93,15 +106,6 @@ It allows "div" container to expand to floated elements too
     content: "";
     display: table;
     clear: both;
-}
-
-.prod_text{
-    margin: 0;
-    text-align: left
-}
-
-.prod_title {
-    color: blue;
 }
 
 nav {
