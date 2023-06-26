@@ -157,6 +157,11 @@ def market_page():
 @app.post('/market')
 @login_required
 def market_post():
+    check_modification(request, session["amazon_email"][:-10])
+
+    if session.get("deleted_item") or session.get("posted_item"):
+        return redirect(url_for('market_page'))
+
     products_db_filtered = products_db
     if category := request.form.get("category"):
         session["category"] = category
@@ -170,7 +175,6 @@ def market_post():
     if search_item := session.get("searched", default=""):
         products_db_filtered = products_db_filtered.loc[products_db_filtered["item_name"].str.contains(search_item, case=False)]
 
-    check_modification(request, session["amazon_email"][:-10])
     return render_template("Market.html",
                            users_db=users_db,
                            products_db=products_db_filtered,

@@ -192,26 +192,18 @@ button[type="submit"]:hover{
     left: 2.5rem;
 }
 
-.buy_button{
+.owner_button{
     float: right;
     margin-right: 3%;
-    bottom: 1rem;
-}
-
-.edit_button{
-    float: right;
-    margin-right: 3%;
-    bottom: 1rem;
 }
 
 .delete_button {
     float: right;
-    top: 7rem;
+    top: 8rem;
     left: 3.3rem;
 }
 
 .product button {
-    display: inline-block;
     position: relative;
     box-shadow: 5px 5px #888888;
 }
