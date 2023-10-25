@@ -1,0 +1,52 @@
+
+{% extends 'header.html' %}
+
+{% block content %}
+<title>Exchange Portal</title>
+</head>
+    <body style="background-color: rgb(249, 247, 247); margin-top:  3%;">
+    <div class="background background_border top">
+        <h1 style="font-size: 60px; margin-top: 20px;"> Amazon Exchange Portal <i class="material-icons" style="font-size: 60px; color: #fd7e14">  shopping_cart
+        </i> </h1>
+        <div class="border" style="margin-bottom: 30%;">
+            Here you can sell, buy, or rent equipment across amazon FCs <i class="material-icons" style="margin-left: -1.5%">  priority_high </i> <i
+                class="material-icons"> warehouse </i>
+        </div>
+        <br>
+        {% if session.pop("wrong_pass", None): %}
+            {% set pass_color = "red" %}
+            <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> The password you’ve entered is incorrect </p><br>
+        {% elif session.pop("wrong_email", None): %}
+            {% set email_color = "red" %}
+            <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> This email address does not exist </p><br>
+        {% endif %}
+        <form action="#" method="post">
+            <div >
+                <label for="email" class="material-icons"> alternate_email </label>
+                <input style="margin-bottom: 1%; border: 2px ridge {{email_color}};"
+                       type="email"
+                       id="email"
+                       name="amazon_email"
+                       placeholder="Amazon email address"
+                       value="{{ amazon_email }}" required>
+                <br>
+                <label for="password" class="material-icons"> lock </label>
+                <input style="margin-bottom: 2%; border: 2px ridge {{pass_color}};"
+                       type="password"
+                       id="password"
+                       name="password"
+                       placeholder="Password"
+                       value="{{ password }}"
+                       required>
+                <br>
+                <button type="submit"
+                        class="btn btn-success">
+                        Login <i class="material-icons"> login </i>
+                </button>
+            </div>
+        </form>
+
+        <a href=/forget_pass style="font-size: 17px; color: lightblue"> Forgot password? </a>
+    </div>
+    </body>
+{% endblock %}

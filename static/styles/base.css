@@ -1,0 +1,231 @@
+
+.background {
+    background-image: url(/static/backgrounds/amazon_city.jpg);
+/*    background-size:contain; */
+    background-size: 100% 100%;
+    height: auto;
+    object-fit: cover
+/*    background-position-x: 20px; */
+    }
+
+.border {
+    text-align: center;
+    background-color: #599C8A;
+    height: auto;
+    width: auto;
+    padding: 0.5%;
+    border-radius: 10px;
+    display: inline-block;
+    box-sizing: border-box;
+    }
+
+.background_border {
+    height: auto;
+    width: 85%;
+    border-radius: 10px;
+    display: inline-block;
+    box-sizing: border-box;
+    padding-bottom: 1%
+    }
+
+.warn_border {
+    text-align: center;
+    background-color: white;
+    height: auto;
+    width: auto;
+    border-radius: 3%;
+    display: inline-block;
+    box-sizing: border-box;
+    }
+
+.warning {color: #DE1313; font-family: Raleway; font-size:12px; font-weight: bold}
+
+.mat_icons {font-size: 180%}
+
+h1 {color: #fd7e14; margin-top: 0%}
+
+body, html {height: 100%; margin: 0px; padding: 0px}
+
+body {text-align: center; font-family: Cairo; font-size: 20px; color: white}
+
+button {font-family: Cairo; font-size: 17px; border-radius: 5px; border-width: 0px; padding: 5px 15px}
+
+input, select {font-family: Raleway; font-size: 17px; border-radius: 10px; border: none; padding: 0.6% 0.5%; width: 20%; background-color: rgb(249, 247, 247)}
+
+input:focus {background-color: lightblue;}
+
+i {vertical-align: middle}
+
+label {vertical-align: middle}
+
+.product {
+  font-size: 85%;
+  border: 1px solid;
+  border-radius: 5px;
+  width: 55%;
+  margin: auto;
+  margin-bottom: 2%;
+  overflow-y: auto;
+  height: auto;
+}
+
+.product:hover{
+    background-color: #FB9B1A
+}
+
+.product img {
+    float: left;
+    border-right: 1px dotted black;
+    margin-right: 2%;
+    width: auto;
+    height: 16.3rem;
+}
+
+.product div {
+    text-align: left;
+}
+
+.prod_info {
+    display: flex;
+    flex-direction: column;
+}
+
+.prod_info p {
+    margin: 0;
+}
+
+.prod_info span {
+    color: blue;
+}
+
+/*
+Used to have any "floated" items be contained within a "div"
+It allows "div" container to expand to floated elements too
+ */
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+nav {
+  border-radius: 1%;
+  background-color: #333;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  justify-content: space-between; /* distribute items evenly along the main axis */
+}
+
+nav li {
+  float: left;
+}
+
+nav a {
+  display: block;
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background-color: #111;
+}
+
+nav .material-icons{
+    color: #fd7e14;
+    font-size: 25px;
+    margin-right: -7px;
+}
+
+.alert {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 0.5rem;
+}
+
+.right {
+  float: right;
+  text-align: right;
+}
+
+#search-bar {
+  font-size: 16px;
+  padding: 12px 20px;
+  border: 2px ridge;
+}
+
+.search_button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover{
+    background-color: green;
+}
+
+.side-panel {
+  position: fixed;
+  border-radius: 1%;
+  top: 0;
+  width: 17%;
+  /* Use linear gradient for background */
+  background-image: linear-gradient(to bottom, #fd7e14, #FFD482);
+  height: 100%;
+}
+
+.cat_label {
+    position: fixed;
+    left: 3rem;
+    top: 7.5rem;
+}
+
+.cat_select{
+    position: fixed;
+    top: 10rem;
+    width: auto;
+    left: 2.5rem;
+}
+
+.owner_button{
+    float: right;
+    margin-right: 3%;
+}
+
+.delete_button {
+    float: right;
+    top: 8rem;
+    left: 3.3rem;
+}
+
+.product button {
+    position: relative;
+    box-shadow: 5px 5px #888888;
+}
+
+#myPopUp {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 600px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.input_lis {
+    list-style-type: none;
+}
+
+.input_lis li {
+    margin-bottom: 2%;
+}

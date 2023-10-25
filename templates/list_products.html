@@ -1,0 +1,47 @@
+
+{% if posted_item %}
+    <h1><span class="badge bg-secondary"> Successfully posted "{{posted_item}}" <i class="material-icons" style="color: #0dcaf0;"> verified </i> </span></h1>
+{% elif deleted_item %}
+    <h3 class="alert alert-danger"> Successfully deleted "{{deleted_item}}" <i class="material-icons"> backspace </i> </h3>
+{% endif %}
+
+{% if not products_db.empty %}
+    <h2> {{products_db | length}} Product Results </h2>
+    <br>
+        {% for product in products_db.itertuples() %}
+            <div class="product">
+                <img class="img-fluid" src="{{ product.img }}" alt="Product {{ loop.index0 }}">
+                <h3 style="padding-top: 1%;"> {{product.item_name}}</h3>
+                {% if product.Index == amazon_email[:-10]: %}
+                    <form action="#" method="post">
+                        <button class="btn btn-dark owner_button" name="edited_item" value='{{product.item_name}}'> EDIT </button>
+                    </form>
+                    <form action="#" method="post">
+                        <button class="btn btn-danger delete_button " name="deleted_item" value="{{product.item_name}}"> <i class="material-icons "> delete_forever
+                        </i>
+                        </button>
+                    </form>
+                {% else: %}
+                    <button onclick="window.location.href='{% include 'emailto.html' %}'" class="owner_button btn btn-success"> BUY </button>
+                {% endif %}
+                <div class="prod_info">
+                    <p> <span> Quantity: </span> {{product.quantity}} pcs </p>
+                    <p> <span> Price/unit: </span>  ${{product.price_per_unit}} </p>
+                    <div>
+                        <span> Belongs to IT? </span>
+                        {% if product.is_IT %}
+                            <input class="form-check-input" type="checkbox" checked disabled>
+                        {% else %}
+                            <input class="form-check-input" type="checkbox" disabled>
+                        {% endif %}
+                    </div>
+                    <p> <span> Category: </span> {{product.category}} </p>
+                    <p><span> Description: </span> {{product.item_desc}} </p>
+                    <p><span> Date posted: </span> {{product.date}} </p>
+                    <p style="margin-bottom: -9%;"><span> By: </span> {{product.Index}} </p>
+                </div>
+            </div>
+        {% endfor %}
+{% else %}
+    <h2> No products posted <i class="material-icons" style="font-size: 30px; color: #fd7e14; "> cancel </i> </h2>
+{% endif %}

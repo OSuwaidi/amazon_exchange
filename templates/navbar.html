@@ -1,0 +1,16 @@
+
+<nav class="fixed-top">
+  <ul>
+    <li><a href="https://www.aboutamazon.com">About <i class="material-icons"> info </i> </a></li>
+    <li><a href="{{url_for('market_page')}}">Home <i class="material-icons"> home </i> </a> </li>
+    <li><a href="#support">Support <i class="material-icons"> support_agent </i> </a></li>
+    <li class="right"> <a href="{{url_for('logout')}}"> Logout <i class="material-icons"> logout </i> </a> </li>
+    <li class="right"> <a href="#" id="myLink"> Post a product <i class="material-icons"> post_add </i> </a> </li>
+    <li class="right"> <a href="{{url_for('user_products', amazon_user=amazon_email[:-10])}}"> My products <i class="material-icons"> category </i> </a>  </li>
+    <li style="position: absolute; left:  50%;"> <i class="material-icons" style="font-size: 60px; color: #FB9B1A"> storefront </i> </li>
+  </ul>
+</nav>
+
+{% include 'post_a_product.html' %}
+{% include 'svg_symbols.html' %}
+{% include 'footer.html' %}

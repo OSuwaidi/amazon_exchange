@@ -1,0 +1,41 @@
+
+{% extends 'header.html' %}
+
+{% block content %}
+<title>Forgot Password</title>
+</head>
+    <body class="background">
+    <div style="margin-top: 5%;">
+        {% if not session.pop("sent", None): %}
+            <h1 style="color: #FB9B1A; margin-bottom:0;"> Don't worry, it happens to the best of us <i class="material-icons" style="margin-left: -1%; font-size: 100%">  priority_high </i>
+            </h1>
+            <p style="margin-bottom:0; margin-top:0; color: #adb5bd"> Please enter your amazon email address below and we'll send you a link to reset your amazon exchange
+                password!
+            </p>
+            {% if session.pop("no_email", None): %}
+                {% set email_color = "red" %}
+                <p class="warning warn_border" style="margin-top:0; margin-bottom:0;"> This email address does not exist </p>
+            {% endif %}
+            <form action="#" method="post" style="margin-bottom:30%">
+                <label for="email" class="material-icons" style="color: #DFBE03"> email </label>
+                <input style="margin-bottom: 1%; border: 2px ridge {{email_color}}"
+                       type="email"
+                       id="email"
+                       name="amazon_email"
+                       value="{{amazon_email}}"
+                       placeholder="Amazon email address"
+                       required>
+                <br>
+                <button type="submit" class="btn btn-success"> Send the magic link <i class="material-icons" style="color: #E3A437"> rocket_launch </i> </button>
+            </form>
+        {% else %}
+            <h1 style="color: #FB9B1A"> <i class="material-icons" style="color: #556DB5; font-size: 150%"> celebration </i> Done! We've emailed you a link to reset
+                your
+                password!
+                <i class="material-icons" style="color: #556DB5; font-size: 150%"> celebration </i></h1>
+        {% endif %}
+
+        <button onclick="window.location.href='/'" type="submit" class="btn btn-success"> Portal <i class="material-icons" style="color: #751BD5"> hub</i> </button>
+    </div>
+    </body>
+{% endblock %}
